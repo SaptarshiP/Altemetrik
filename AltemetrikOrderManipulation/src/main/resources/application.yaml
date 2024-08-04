@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: AltemetrikOrderManipulation
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:mysql://localhost:3306/transaction_db
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8094
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 
+          - health
+          - bean
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      CircuitBreakerService:
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        sliding-window-type: count-based 
+service:
+  UserManipulationService:
+    getUserName:
+      url: /getUser 
+       
